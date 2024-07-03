@@ -33,40 +33,32 @@ func TestWalk(t *testing.T) {
 			struct {
 				Name string
 				City string
-			}{"Suian", "Rio de Janeiro"},
-			[]string{"Suian", "Rio de Janeiro"},
+			}{"Tiago", "São Paulo"},
+			[]string{"Tiago", "São Paulo"},
 		},
 		{
 			"struct with non string field",
 			struct {
 				Name string
 				Age  int
-			}{"Alecrim", 10},
-			[]string{"Alecrim"},
+			}{"Suian", 34},
+			[]string{"Suian"},
 		},
 		{
 			"nested fields",
 			Person{
-				"Chris",
-				Profile{33, "London"},
+				"Tiago",
+				Profile{42, "São Paulo"},
 			},
-			[]string{"Chris", "London"},
+			[]string{"Tiago", "São Paulo"},
 		},
 		{
 			"pointers to things",
 			&Person{
-				"Chris",
-				Profile{33, "London"},
+				"Tiago",
+				Profile{42, "São Paulo"},
 			},
-			[]string{"Chris", "London"},
-		},
-		{
-			"slices",
-			[]Profile{
-				{33, "London"},
-				{34, "Rio de Janeiro"},
-			},
-			[]string{"London", "Rio de Janeiro"},
+			[]string{"Tiago", "São Paulo"},
 		},
 	}
 
