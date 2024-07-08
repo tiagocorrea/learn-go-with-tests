@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 	"testing/quick"
 )
@@ -64,19 +65,45 @@ func TestConvertingToArabic(t *testing.T) {
 }
 
 func TestPropertiesOfConversion(t *testing.T) {
-	assertion := func(arabic uint16) bool {
-		if arabic > 3999 {
+	t.Run("bi-directional conversion", func(t *testing.T) {
+		assertion := func(arabic uint16) bool {
+			if arabic > 3999 {
+				return true
+			}
+			t.Log("testing", arabic)
+			roman := ConvertToRoman(arabic)
+			fromRoman := ConvertToArabic(roman)
+			return fromRoman == arabic
+		}
+
+		if err := quick.Check(assertion, &quick.Config{
+			MaxCount: 1000,
+		}); err != nil {
+			t.Error("failed checks", err)
+		}
+	})
+
+	t.Run("can't have more than 3 consecutives symbols", func(t *testing.T) {
+		assertion := func(arabic uint16) bool {
+			if arabic > 3999 {
+				return true
+			}
+			t.Log("testing", arabic)
+			roman := ConvertToRoman(arabic)
+			symbols := []string{"I", "V", "X", "L", "C", "D", "M"}
+			for _, symbol := range symbols {
+				repeatedSymbol := strings.Repeat(symbol, 4)
+				if strings.Contains(roman, repeatedSymbol) {
+					t.Errorf("Roman numeral can't have more than 3 consecutive symbols, invalid %q symbol on numeral %q", repeatedSymbol, roman)
+					return false
+				}
+			}
 			return true
 		}
-		t.Log("testing", arabic)
-		roman := ConvertToRoman(arabic)
-		fromRoman := ConvertToArabic(roman)
-		return fromRoman == arabic
-	}
-
-	if err := quick.Check(assertion, &quick.Config{
-		MaxCount: 1000,
-	}); err != nil {
-		t.Error("failed checks", err)
-	}
+		if err := quick.Check(assertion, &quick.Config{
+			MaxCount: 1000,
+		}); err != nil {
+			t.Error("failed checks", err)
+		}
+	})
 }
