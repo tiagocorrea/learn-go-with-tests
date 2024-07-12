@@ -3,20 +3,22 @@ package main
 import "testing"
 
 func TestBadBank(t *testing.T) {
-	transactions := []Transaction{
-		{
-			From: "Tiago",
-			To:   "Suian",
-			Sum:  100,
-		},
-		{
-			From: "Éber",
-			To:   "Tiago",
-			Sum:  25,
-		},
+	var (
+		suian = Account{Name: "Suian", Balance: 100}
+		tiago = Account{Name: "Tiago", Balance: 75}
+		eber  = Account{Name: "Éber", Balance: 200}
+
+		transactions = []Transaction{
+			NewTransaction(tiago, suian, 100),
+			NewTransaction(eber, tiago, 25),
+		}
+	)
+
+	newBalanceFor := func(account Account) float64 {
+		return NewBalanceFor(account, transactions).Balance
 	}
 
-	AssertEqual(t, BalanceFor(transactions, "Suian"), 100)
-	AssertEqual(t, BalanceFor(transactions, "Tiago"), -75)
-	AssertEqual(t, BalanceFor(transactions, "Éber"), -25)
+	AssertEqual(t, newBalanceFor(suian), 200)
+	AssertEqual(t, newBalanceFor(tiago), 0)
+	AssertEqual(t, newBalanceFor(eber), 175)
 }

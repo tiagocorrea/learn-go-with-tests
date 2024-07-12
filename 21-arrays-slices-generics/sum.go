@@ -1,13 +1,5 @@
 package main
 
-func Reduce[A any](collection []A, f func(A, A) A, initialValue A) A {
-	var result = initialValue
-	for _, x := range collection {
-		result = f(result, x)
-	}
-	return result
-}
-
 // Sum calculates the total from a slice of numbers.
 func Sum(numbers []int) int {
 	add := func(acc, x int) int { return acc + x }
