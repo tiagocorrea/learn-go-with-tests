@@ -6,5 +6,5 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, world")
+	fmt.Fprintf(w, "Hello, %s", r.URL.Query().Get("name"))
 }
