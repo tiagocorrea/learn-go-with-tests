@@ -9,5 +9,5 @@ import (
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
-	fmt.Fprintf(w, interactions.Greet(name))
+	fmt.Fprint(w, interactions.Greet(name))
 }
