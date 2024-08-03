@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"sort"
 )
 
 type FileSystemPlayerStore struct {
@@ -48,7 +49,11 @@ func initialisePlayerDBFile(file *os.File) error {
 	return nil
 }
 
+// Get league data sorted by player biggest score
 func (f *FileSystemPlayerStore) GetLeague() League {
+	sort.Slice(f.league, func(i, j int) bool {
+		return f.league[i].Wins > f.league[j].Wins
+	})
 	return f.league
 }
 
